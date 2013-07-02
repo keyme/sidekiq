@@ -20,6 +20,7 @@ module Sidekiq
     :environment => nil,
     :timeout => 8,
     :profile => false,
+		:preload => nil
   }
 
   def self.❨╯°□°❩╯︵┻━┻

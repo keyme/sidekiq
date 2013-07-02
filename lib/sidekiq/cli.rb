@@ -36,6 +36,7 @@ module Sidekiq
       setup_options(args)
       initialize_logger
       validate!
+			preload
       daemonize
       write_pid
       load_celluloid
@@ -291,6 +292,10 @@ module Sidekiq
           opts[:pidfile] = arg
         end
 
+				o.on '-S', '--preload-script PATH', "path to a file to load before daemonizing" do |arg|
+					opts[:preload] = arg
+				end
+
         o.on '-V', '--version', "Print version and exit" do |arg|
           puts "Sidekiq #{Sidekiq::VERSION}"
           die(0)
@@ -312,6 +317,12 @@ module Sidekiq
 
       Sidekiq.logger.level = Logger::DEBUG if options[:verbose]
     end
+
+		def preload
+			return if options[:preload].nil?
+
+			load options[:preload]
+		end
 
     def write_pid
       if path = options[:pidfile]
